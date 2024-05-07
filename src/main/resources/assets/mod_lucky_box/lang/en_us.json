@@ -1,3 +1,5 @@
 {
-  "item.mod_lucky_box.coin": "Coin"
+  "item.mod_lucky_box.coin": "Coin",
+
+  "block.mod_lucky_box.lucky_box": "Lucky Box"
 }
