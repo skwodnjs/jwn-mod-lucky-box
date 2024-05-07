@@ -1,6 +1,7 @@
 package net.jwn.mod;
 
 import com.mojang.logging.LogUtils;
+import net.jwn.mod.item.ModItems;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.food.FoodProperties;
@@ -31,11 +32,13 @@ import org.slf4j.Logger;
 @Mod(Main.MOD_ID)
 public class Main {
     // Define mod id in a common place for everything to reference
-    public static final String MOD_ID = "examplemod";
+    public static final String MOD_ID = "mod_lucky_box";
     // Directly reference a slf4j logger
     private static final Logger LOGGER = LogUtils.getLogger();
     public Main() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+
+        ModItems.register(modEventBus);
 
         modEventBus.addListener(this::commonSetup);
 
