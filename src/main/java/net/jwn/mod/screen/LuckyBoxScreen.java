@@ -3,14 +3,19 @@ package net.jwn.mod.screen;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.jwn.mod.Main;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 
 public class LuckyBoxScreen extends AbstractContainerScreen<LuckyBoxMenu> {
     private static final ResourceLocation TEXTURE = new ResourceLocation(Main.MOD_ID, "textures/gui/lucky_box_gui.png");
+    private int x, y;
+    private boolean isHover;
 
     public LuckyBoxScreen(LuckyBoxMenu pMenu, Inventory pPlayerInventory, Component pTitle) {
         super(pMenu, pPlayerInventory, pTitle);
@@ -19,8 +24,9 @@ public class LuckyBoxScreen extends AbstractContainerScreen<LuckyBoxMenu> {
     @Override
     protected void init() {
         super.init();
-//        this.inventoryLabelY = 10000;
-//        this.titleLabelY = 10000;
+        x = (width - imageWidth) / 2;
+        y = (height - imageHeight) / 2;
+        isHover = false;
     }
 
     @Override
@@ -28,8 +34,6 @@ public class LuckyBoxScreen extends AbstractContainerScreen<LuckyBoxMenu> {
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.setShaderTexture(0, TEXTURE);
-        int x = (width - imageWidth) / 2;
-        int y = (height - imageHeight) / 2;
 
         guiGraphics.blit(TEXTURE, x, y, 0, 0, imageWidth, imageHeight);
     }
@@ -39,5 +43,14 @@ public class LuckyBoxScreen extends AbstractContainerScreen<LuckyBoxMenu> {
         renderBackground(guiGraphics);
         super.render(guiGraphics, mouseX, mouseY, delta);
         renderTooltip(guiGraphics, mouseX, mouseY);
+
+        isHover = x + 125 <= mouseX && mouseX <= x + 125 + 20 && y + 34 <= mouseY && mouseY <= y + 34 + 18;
+
+        ImageButton button;
+        button = new ImageButton(x + 125, y + 34, 20, 18, 0, isHover ? 187 : 168, 0,
+                TEXTURE, 256, 256, pButton -> {
+            this.menu.getSlot(35 + 1).set(new ItemStack(Items.GOLD_INGOT, 2)); // only client side
+        });
+        addRenderableWidget(button);
     }
 }
