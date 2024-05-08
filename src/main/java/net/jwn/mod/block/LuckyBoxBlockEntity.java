@@ -23,8 +23,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class LuckyBoxBlockEntity extends BlockEntity implements MenuProvider {
 
-    private final ItemStackHandler itemHandler = new ItemStackHandler(1);
-    private static final int OUTPUT_SLOT = 0;
+    private final ItemStackHandler itemHandler = new ItemStackHandler(2);
 
     private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
 

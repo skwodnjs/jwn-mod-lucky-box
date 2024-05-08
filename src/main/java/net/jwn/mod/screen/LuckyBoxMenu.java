@@ -2,6 +2,7 @@ package net.jwn.mod.screen;
 
 import net.jwn.mod.block.LuckyBoxBlockEntity;
 import net.jwn.mod.block.ModBlocks;
+import net.jwn.mod.item.ModItems;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -23,7 +24,7 @@ public class LuckyBoxMenu extends AbstractContainerMenu {
 
     public LuckyBoxMenu(int pContainerId, Inventory inv, BlockEntity entity) {
         super(ModMenuTypes.LUCKY_BOX_MENU.get(), pContainerId);
-        checkContainerSize(inv, 1);
+        checkContainerSize(inv, 2);
         blockEntity = ((LuckyBoxBlockEntity) entity);
         this.level = inv.player.level();
 
@@ -31,7 +32,13 @@ public class LuckyBoxMenu extends AbstractContainerMenu {
         addPlayerHotbar(inv);
 
         this.blockEntity.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(iItemHandler -> {
-            this.addSlot(new SlotItemHandler(iItemHandler, 0, 80, 35) {
+            this.addSlot(new SlotItemHandler(iItemHandler, 0, 44, 35) {
+                @Override
+                public boolean mayPlace(@NotNull ItemStack stack) {
+                    return stack.is(ModItems.COIN.get());
+                }
+            });
+            this.addSlot(new SlotItemHandler(iItemHandler, 1, 80, 35) {
                 @Override
                 public boolean mayPlace(@NotNull ItemStack stack) {
                     return false;
@@ -56,7 +63,7 @@ public class LuckyBoxMenu extends AbstractContainerMenu {
     private static final int TE_INVENTORY_FIRST_SLOT_INDEX = VANILLA_FIRST_SLOT_INDEX + VANILLA_SLOT_COUNT;
 
     // THIS YOU HAVE TO DEFINE!
-    private static final int TE_INVENTORY_SLOT_COUNT = 1;  // must be the number of slots you have!
+    private static final int TE_INVENTORY_SLOT_COUNT = 2;  // must be the number of slots you have!
     @Override
     public ItemStack quickMoveStack(Player playerIn, int pIndex) {
         Slot sourceSlot = slots.get(pIndex);
