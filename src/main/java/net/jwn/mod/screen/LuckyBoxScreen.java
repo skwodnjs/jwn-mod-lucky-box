@@ -49,7 +49,7 @@ public class LuckyBoxScreen extends AbstractContainerScreen<LuckyBoxMenu> {
         ImageButton button;
         button = new ImageButton(x + 125, y + 34, 20, 18, 0, isHover ? 187 : 168, 0,
                 TEXTURE, 256, 256, pButton -> {
-            this.menu.getSlot(35 + 2).set(new ItemStack(Items.GOLD_INGOT, 2)); // only client side
+            this.menu.buttonPressed();
         });
         addRenderableWidget(button);
     }

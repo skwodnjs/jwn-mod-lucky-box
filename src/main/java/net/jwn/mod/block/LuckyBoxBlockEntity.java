@@ -1,5 +1,6 @@
 package net.jwn.mod.block;
 
+import net.jwn.mod.item.ModItems;
 import net.jwn.mod.screen.LuckyBoxMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -11,6 +12,9 @@ import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
@@ -83,5 +87,10 @@ public class LuckyBoxBlockEntity extends BlockEntity implements MenuProvider {
         itemHandler.deserializeNBT(pTag.getCompound("inventory"));
     }
 
-
+    public void pressButton() {
+        if (this.itemHandler.getStackInSlot(0).is(ModItems.COIN.get())) {
+            this.itemHandler.setStackInSlot(0, new ItemStack(ModItems.COIN.get(), this.itemHandler.getStackInSlot(0).getCount() - 1));
+            this.itemHandler.setStackInSlot(1, new ItemStack(Items.GOLD_INGOT, 2));
+        }
+    }
 }

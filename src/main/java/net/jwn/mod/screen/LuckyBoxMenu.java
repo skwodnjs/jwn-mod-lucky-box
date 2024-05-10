@@ -3,11 +3,14 @@ package net.jwn.mod.screen;
 import net.jwn.mod.block.LuckyBoxBlockEntity;
 import net.jwn.mod.block.ModBlocks;
 import net.jwn.mod.item.ModItems;
+import net.jwn.mod.networking.ModMessages;
+import net.jwn.mod.networking.packet.LuckyBoxGetC2SPacket;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
@@ -114,5 +117,9 @@ public class LuckyBoxMenu extends AbstractContainerMenu {
         for (int i = 0; i < 9; ++i) {
             this.addSlot(new Slot(playerInventory, i, 8 + i * 18, 142));
         }
+    }
+
+    public void buttonPressed() {
+        ModMessages.sendToServer(new LuckyBoxGetC2SPacket(this.blockEntity.getBlockPos()));
     }
 }

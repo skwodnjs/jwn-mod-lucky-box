@@ -4,6 +4,7 @@ import com.mojang.logging.LogUtils;
 import net.jwn.mod.block.ModBlockEntities;
 import net.jwn.mod.block.ModBlocks;
 import net.jwn.mod.item.ModItems;
+import net.jwn.mod.networking.ModMessages;
 import net.jwn.mod.screen.LuckyBoxScreen;
 import net.jwn.mod.screen.ModMenuTypes;
 import net.minecraft.client.gui.screens.MenuScreens;
@@ -44,7 +45,7 @@ public class Main {
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
-
+        ModMessages.register();
     }
 
     // Add the example block item to the building blocks tab
