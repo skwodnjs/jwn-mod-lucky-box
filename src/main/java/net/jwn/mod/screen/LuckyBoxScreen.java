@@ -2,6 +2,8 @@ package net.jwn.mod.screen;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.jwn.mod.Main;
+import net.jwn.mod.networking.ModMessages;
+import net.jwn.mod.networking.packet.LuckyBoxGetC2SPacket;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -9,8 +11,6 @@ import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 
 public class LuckyBoxScreen extends AbstractContainerScreen<LuckyBoxMenu> {
     private static final ResourceLocation TEXTURE = new ResourceLocation(Main.MOD_ID, "textures/gui/lucky_box_gui.png");
@@ -49,7 +49,7 @@ public class LuckyBoxScreen extends AbstractContainerScreen<LuckyBoxMenu> {
         ImageButton button;
         button = new ImageButton(x + 125, y + 34, 20, 18, 0, isHover ? 187 : 168, 0,
                 TEXTURE, 256, 256, pButton -> {
-            this.menu.buttonPressed();
+            ModMessages.sendToServer(new LuckyBoxGetC2SPacket(this.menu.blockEntity.getBlockPos()));
         });
         addRenderableWidget(button);
     }

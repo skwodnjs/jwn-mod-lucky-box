@@ -1,5 +1,6 @@
 package net.jwn.mod.block;
 
+import net.jwn.mod.item.ItemsEnum;
 import net.jwn.mod.item.ModItems;
 import net.jwn.mod.screen.LuckyBoxMenu;
 import net.minecraft.core.BlockPos;
@@ -14,7 +15,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
@@ -25,9 +25,19 @@ import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Random;
+
 public class LuckyBoxBlockEntity extends BlockEntity implements MenuProvider {
 
-    private final ItemStackHandler itemHandler = new ItemStackHandler(2);
+    private final ItemStackHandler itemHandler = new ItemStackHandler(2) {
+        @Override
+        protected void onContentsChanged(int slot) {
+            setChanged();
+            if(!level.isClientSide()) {
+                level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), 3);
+            }
+        }
+    };;
 
     private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
 
@@ -88,9 +98,13 @@ public class LuckyBoxBlockEntity extends BlockEntity implements MenuProvider {
     }
 
     public void pressButton() {
-        if (this.itemHandler.getStackInSlot(0).is(ModItems.COIN.get())) {
+        if (this.itemHandler.getStackInSlot(0).is(ModItems.COIN.get()) && this.itemHandler.getStackInSlot(1).isEmpty()) {
+            Item randomItem = ItemsEnum.randomItem();
+            int count = new Random().nextInt(randomItem.getMaxStackSize()) + 1;
+            ItemStack randomItemStack = new ItemStack(randomItem, count);
+
             this.itemHandler.setStackInSlot(0, new ItemStack(ModItems.COIN.get(), this.itemHandler.getStackInSlot(0).getCount() - 1));
-            this.itemHandler.setStackInSlot(1, new ItemStack(Items.GOLD_INGOT, 2));
+            this.itemHandler.setStackInSlot(1, randomItemStack);
         }
     }
 }
